@@ -2,6 +2,7 @@
 import pygame
 from pygame.locals import *
 import constants
+import time
 
 nocontext = 0
 
@@ -11,6 +12,7 @@ class Snek():
         self.snake_body = pygame.image.load('images/snek_body.png')
         self.x = 100
         self.y = 100
+        self.direction = 'none'
 
     def draw(self):
         self.parent_window.fill(constants.bg_color)
@@ -18,20 +20,32 @@ class Snek():
         pygame.display.flip()
 
     def move_left(self):
-        self.x -= 10
-        self.draw()
+        self.direction = 'left'
 
     def move_right(self):
-        self.x += 10
-        self.draw()
+        self.direction = 'right'
 
     def move_up(self):
-        self.y -= 10
-        self.draw()
+        self.direction = 'up'
 
     def move_down(self):
-        self.y += 10
+        self.direction = 'down'
+
+    def walk(self):
+        if self.direction == 'up':
+            self.y -= 32
+
+        if self.direction == 'down':
+            self.y += 32
+
+        if self.direction == 'left':
+            self.x -= 32
+
+        if self.direction == 'right':
+            self.x += 32
+        
         self.draw()
+        
 
 class Game():
     def __init__(self):
@@ -76,6 +90,9 @@ class Game():
                     
                 elif event.type == QUIT:
                     running = False
+
+            self.snek.walk()
+            time.sleep(0.1)
 
 game = Game()
 game.run()

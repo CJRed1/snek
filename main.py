@@ -5,6 +5,15 @@ import constants
 import time
 
 nocontext = 0
+pygame.mixer.init()
+
+# Sounds
+rotato = pygame.mixer.Sound("sounds/rotato.ogg")
+aple = pygame.mixer.Sound("sounds/aple.ogg")
+collision = pygame.mixer.Sound("sounds/collision.ogg")
+pygame.mixer.Sound.set_volume(rotato, 0.2)
+pygame.mixer.Sound.set_volume(aple, 0.2)
+pygame.mixer.Sound.set_volume(collision, 0.2)
 
 class Snek():
     def __init__(self, parent_window):
@@ -71,12 +80,16 @@ class Game():
 
                     if event.key == K_UP:
                         self.snek.move_up()
+                        pygame.mixer.Sound.play(rotato)
                     if event.key == K_DOWN:
                         self.snek.move_down()
+                        pygame.mixer.Sound.play(rotato)
                     if event.key == K_LEFT:
                         self.snek.move_left()
+                        pygame.mixer.Sound.play(rotato)
                     if event.key == K_RIGHT:
                         self.snek.move_right()
+                        pygame.mixer.Sound.play(rotato)
 
 
                     if event.key == K_s:

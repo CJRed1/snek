@@ -3,6 +3,7 @@ import pygame
 from pygame.locals import *
 import constants
 import time
+import random
 
 nocontext = 0
 pygame.mixer.init()
@@ -15,18 +16,32 @@ pygame.mixer.Sound.set_volume(rotato, 0.2)
 pygame.mixer.Sound.set_volume(aple, 0.2)
 pygame.mixer.Sound.set_volume(collision, 0.2)
 
-class Snek():
+class Aple():
     def __init__(self, parent_window):
         self.parent_window = parent_window
+        self.image = pygame.image.load('images/aple.png')
+        self.x = 120
+        self.y = 120
+
+    def draw(self):
+        self.parent_window.blit(self.image, (self.x, self.y))
+        pygame.display.flip()
+
+class Snek():
+    def __init__(self, parent_window, lenght):
+        self.parent_window = parent_window
         self.snake_body = pygame.image.load('images/snek_body.png')
-        self.x = 100
-        self.y = 100
         self.direction = 'none'
+
+        self.lenght = lenght
+        self.x = [32]*lenght
+        self.y = [32]*lenght
 
     def draw(self):
         self.parent_window.fill(constants.bg_color)
-        self.parent_window.blit(self.snake_body, (self.x, self.y))
-        pygame.display.flip()
+        for i in range(self.lenght):
+            self.parent_window.blit(self.snake_body, (self.x[i], self.y[i]))
+            pygame.display.flip()
 
     def move_left(self):
         self.direction = 'left'
@@ -41,18 +56,23 @@ class Snek():
         self.direction = 'down'
 
     def walk(self):
+        for i in range(self.lenght-1, 0, -1):
+            self.x[i] = self.x[i-1]
+            self.y[i] = self.y[i-1]
+        
+        # Head
         if self.direction == 'up':
-            self.y -= 32
+            self.y[0] -= constants.snek_size
 
         if self.direction == 'down':
-            self.y += 32
+            self.y[0] += constants.snek_size
 
         if self.direction == 'left':
-            self.x -= 32
+            self.x[0] -= constants.snek_size
 
         if self.direction == 'right':
-            self.x += 32
-        
+            self.x[0] += constants.snek_size
+    
         self.draw()
         
 
@@ -65,8 +85,11 @@ class Game():
         pygame.display.set_icon(icon)
         self.window.fill(constants.bg_color)
         
-        self.snek = Snek(self.window)
+        self.snek = Snek(self.window, 5)
         self.snek.draw()
+
+        self.aple = Aple(self.window)
+        self.aple.draw()
 
         pygame.display.update()
 

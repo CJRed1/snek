@@ -6,3 +6,6 @@ title = 'Snek'
 
 # Colors
 bg_color = (123, 255, 255)
+
+# Snek
+snek_size = 32

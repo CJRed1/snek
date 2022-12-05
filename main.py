@@ -20,8 +20,8 @@ class Aple():
     def __init__(self, parent_window):
         self.parent_window = parent_window
         self.image = pygame.image.load('images/aple.png')
-        self.x = 120
-        self.y = 120
+        self.x = 32 * random.randint(1, 20)
+        self.y = 32 * random.randint(1, 15)
 
     def draw(self):
         self.parent_window.blit(self.image, (self.x, self.y))
@@ -93,6 +93,21 @@ class Game():
 
         pygame.display.update()
 
+    def is_collision(self, x1, y1, x2, y2):
+        if x1 >= x2 and x1 < x2 + constants.snek_size:
+            if y1 >= y2 and y1 < y2 + constants.snek_size:
+                return True
+        return False
+    
+    def play(self):
+        self.snek.walk()
+        self.aple.draw()
+
+        if self.is_collision(self.snek.x[0], self.snek.y[0], self.aple.x, self.aple.y):
+            self.aple.x = 32 * random.randint(1, 20)
+            self.aple.y = 32 * random.randint(1, 15)
+
+
     def run(self):
         running = True
         while running:
@@ -127,7 +142,7 @@ class Game():
                 elif event.type == QUIT:
                     running = False
 
-            self.snek.walk()
+            self.play()
             time.sleep(0.1)
 
 game = Game()

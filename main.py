@@ -6,7 +6,7 @@ import time
 import random
 
 nocontext = 0
-game_speed = 0.3 
+game_speed = 0.3
 pygame.mixer.init()
 
 # Sounds
@@ -36,6 +36,10 @@ class Snek():
     def __init__(self, parent_window, length):
         self.parent_window = parent_window
         self.snake_body = pygame.image.load('images/snek_body.png')
+        self.snake_headL = pygame.image.load('images/snek_lhead.png')
+        self.snake_headD = pygame.image.load('images/snek_dhead.png')
+        self.snake_headU = pygame.image.load('images/snek_uhead.png')
+        self.snake_headR = pygame.image.load('images/snek_rhead.png')
         self.direction = 'none'
 
         self.length = length
@@ -50,20 +54,34 @@ class Snek():
     def draw(self):
         self.parent_window.fill(constants.bg_color)
         for i in range(self.length):
-            self.parent_window.blit(self.snake_body, (self.x[i], self.y[i]))
+            if i == 0:
+                if self.direction == 'left':
+                    self.parent_window.blit(self.snake_headL, (self.x[i], self.y[i]))
+                elif self.direction == 'right':
+                    self.parent_window.blit(self.snake_headR, (self.x[i], self.y[i]))
+                elif self.direction == 'up':
+                    self.parent_window.blit(self.snake_headU, (self.x[i], self.y[i]))
+                else:
+                    self.parent_window.blit(self.snake_headD, (self.x[i], self.y[i]))
+            else:
+                self.parent_window.blit(self.snake_body, (self.x[i], self.y[i]))
             pygame.display.flip()
 
     def move_left(self):
-        self.direction = 'left'
+        if self.direction != 'right':
+            self.direction = 'left'
 
     def move_right(self):
-        self.direction = 'right'
+        if self.direction != 'left':
+            self.direction = 'right'
 
     def move_up(self):
-        self.direction = 'up'
+        if self.direction != 'down':
+            self.direction = 'up'
 
     def move_down(self):
-        self.direction = 'down'
+        if self.direction != 'up':
+            self.direction = 'down'
 
     def walk(self):
         for i in range(self.length-1, 0, -1):
@@ -113,6 +131,8 @@ class Game():
     def play(self):
         self.snek.walk()
         self.aple.draw()
+        self.show_score()
+        pygame.display.flip()
 
         if self.is_collision(self.snek.x[0], self.snek.y[0], self.aple.x, self.aple.y):
             self.aple.move()
@@ -120,6 +140,10 @@ class Game():
             if self.speed >= 0.05:
                 self.speed -= 0.01
 
+    def show_score(self):
+        font = pygame.font.Font('Pixels.ttf', 60)
+        score = font.render(f'Score: {self.snek.length - 5}', True, (0, 0, 0))
+        self.window.blit(score, (5, -15))
 
     def run(self):
         running = True

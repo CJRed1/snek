@@ -33,23 +33,23 @@ class Aple():
         self.y = 32 * random.randint(1, 14)
 
 class Snek():
-    def __init__(self, parent_window, lenght):
+    def __init__(self, parent_window, length):
         self.parent_window = parent_window
         self.snake_body = pygame.image.load('images/snek_body.png')
         self.direction = 'none'
 
-        self.lenght = lenght
-        self.x = [constants.snek_size]*lenght
-        self.y = [constants.snek_size]*lenght
+        self.length = length
+        self.x = [constants.snek_size]*length
+        self.y = [constants.snek_size]*length
 
     def increase(self):
-        self.lenght += 1
+        self.length += 1
         self.x.append(-1)
         self.y.append(-1)
 
     def draw(self):
         self.parent_window.fill(constants.bg_color)
-        for i in range(self.lenght):
+        for i in range(self.length):
             self.parent_window.blit(self.snake_body, (self.x[i], self.y[i]))
             pygame.display.flip()
 
@@ -66,7 +66,7 @@ class Snek():
         self.direction = 'down'
 
     def walk(self):
-        for i in range(self.lenght-1, 0, -1):
+        for i in range(self.length-1, 0, -1):
             self.x[i] = self.x[i-1]
             self.y[i] = self.y[i-1]
         

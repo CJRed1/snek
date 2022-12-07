@@ -1,6 +1,6 @@
 # Window
-wscreen = 800
-hscreen = 600
+wscreen = 640
+hscreen = 480
 size = (wscreen, hscreen)
 title = 'Snek'
 

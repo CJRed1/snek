@@ -6,6 +6,7 @@ import time
 import random
 
 nocontext = 0
+game_speed = 0.3 
 pygame.mixer.init()
 
 # Sounds
@@ -20,12 +21,16 @@ class Aple():
     def __init__(self, parent_window):
         self.parent_window = parent_window
         self.image = pygame.image.load('images/aple.png')
-        self.x = 32 * random.randint(1, 20)
-        self.y = 32 * random.randint(1, 15)
+        self.x = 32 * random.randint(1, 19)
+        self.y = 32 * random.randint(1, 14)
 
     def draw(self):
         self.parent_window.blit(self.image, (self.x, self.y))
         pygame.display.flip()
+
+    def move(self):
+        self.x = 32 * random.randint(1, 19)
+        self.y = 32 * random.randint(1, 14)
 
 class Snek():
     def __init__(self, parent_window, lenght):
@@ -34,8 +39,13 @@ class Snek():
         self.direction = 'none'
 
         self.lenght = lenght
-        self.x = [32]*lenght
-        self.y = [32]*lenght
+        self.x = [constants.snek_size]*lenght
+        self.y = [constants.snek_size]*lenght
+
+    def increase(self):
+        self.lenght += 1
+        self.x.append(-1)
+        self.y.append(-1)
 
     def draw(self):
         self.parent_window.fill(constants.bg_color)
@@ -84,6 +94,7 @@ class Game():
         icon = pygame.image.load('images/snek.png')
         pygame.display.set_icon(icon)
         self.window.fill(constants.bg_color)
+        self.speed = 0.3
         
         self.snek = Snek(self.window, 5)
         self.snek.draw()
@@ -104,8 +115,10 @@ class Game():
         self.aple.draw()
 
         if self.is_collision(self.snek.x[0], self.snek.y[0], self.aple.x, self.aple.y):
-            self.aple.x = 32 * random.randint(1, 20)
-            self.aple.y = 32 * random.randint(1, 15)
+            self.aple.move()
+            self.snek.increase()
+            if self.speed >= 0.05:
+                self.speed -= 0.01
 
 
     def run(self):
@@ -143,7 +156,7 @@ class Game():
                     running = False
 
             self.play()
-            time.sleep(0.1)
+            time.sleep(self.speed)
 
 game = Game()
 game.run()

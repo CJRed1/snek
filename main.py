@@ -136,6 +136,7 @@ class Game():
 
         if self.is_collision(self.snek.x[0], self.snek.y[0], self.aple.x, self.aple.y):
             self.aple.move()
+            pygame.mixer.Sound.play(aple)
             self.snek.increase()
             if self.speed >= 0.05:
                 self.speed -= 0.01

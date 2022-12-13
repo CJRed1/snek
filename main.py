@@ -5,6 +5,13 @@ import constants
 import time
 import random
 
+# Hey! CJ here. When I started this project, only
+# me and God knew what was going on, now, only God
+# knows! So if you try to modify the code (and
+# ultimately fail), please update this counter
+
+# total_hours_wasted_here = 253
+
 nocontext = 0
 game_speed = 0.3
 pygame.mixer.init()
@@ -203,19 +210,20 @@ class Game():
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
                         running = False
-
-                    if event.key == K_UP:
-                        self.snek.move_up()
-                        pygame.mixer.Sound.play(rotato)
-                    if event.key == K_DOWN:
-                        self.snek.move_down()
-                        pygame.mixer.Sound.play(rotato)
-                    if event.key == K_LEFT:
-                        self.snek.move_left()
-                        pygame.mixer.Sound.play(rotato)
-                    if event.key == K_RIGHT:
-                        self.snek.move_right()
-                        pygame.mixer.Sound.play(rotato)
+                    
+                    if self.snek.direction != 'death':
+                        if event.key == K_UP:
+                            self.snek.move_up()
+                            pygame.mixer.Sound.play(rotato)
+                        if event.key == K_DOWN:
+                            self.snek.move_down()
+                            pygame.mixer.Sound.play(rotato)
+                        if event.key == K_LEFT:
+                            self.snek.move_left()
+                            pygame.mixer.Sound.play(rotato)
+                        if event.key == K_RIGHT:
+                            self.snek.move_right()
+                            pygame.mixer.Sound.play(rotato)
 
                     if event.key == K_RETURN and self.snek.direction == 'death':
                         self.snek.direction = 'none'

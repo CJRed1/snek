@@ -17,6 +17,7 @@ pygame.mixer.Sound.set_volume(rotato, 0.2)
 pygame.mixer.Sound.set_volume(aple, 0.2)
 pygame.mixer.Sound.set_volume(collision, 0.2)
 
+# Classes
 class Aple():
     def __init__(self, parent_window):
         self.parent_window = parent_window
@@ -67,6 +68,7 @@ class Snek():
                 self.parent_window.blit(self.snake_body, (self.x[i], self.y[i]))
             pygame.display.flip()
 
+    # Moving
     def move_left(self):
         if self.direction != 'right':
             self.direction = 'left'
@@ -102,8 +104,20 @@ class Snek():
             self.x[0] += constants.snek_size
     
         self.draw()
-        
 
+# Gun... why not  
+class Pitola():
+    def __init__(self, parent_window):
+        self.parent_window = parent_window
+        self.image = pygame.image.load('images/pitola.png')
+        self.x = 64
+        self.y = 40
+
+    def draw(self):
+        self.parent_window.blit(self.image, (self.x, self.y))
+        pygame.display.flip()
+
+# Game
 class Game():
     def __init__(self):
         pygame.init()
@@ -120,6 +134,9 @@ class Game():
         self.aple = Aple(self.window)
         self.aple.draw()
 
+        self.pitola = Pitola(self.window)
+        self.pitola.draw()
+
         pygame.display.update()
 
     def is_collision(self, x1, y1, x2, y2):
@@ -128,12 +145,16 @@ class Game():
                 return True
         return False
     
+# Whole game
     def play(self):
+        self.pitola.x = self.snek.x[0] + 32
+        self.pitola.y = self.snek.y[0] + 8
         self.snek.walk()
         self.aple.draw()
+        self.pitola.draw()
         self.show_score()
         pygame.display.flip()
-
+        
         if self.is_collision(self.snek.x[0], self.snek.y[0], self.aple.x, self.aple.y):
             self.aple.move()
             pygame.mixer.Sound.play(aple)
@@ -141,11 +162,40 @@ class Game():
             if self.speed >= 0.05:
                 self.speed -= 0.01
 
+        for i in range(1, self.snek.length):
+            if self.snek.direction != 'none' and self.is_collision(self.snek.x[0], self.snek.y[0], self.snek.x[i], self.snek.y[i]):
+                self.show_death()
+                if self.snek.direction != 'death':
+                    pygame.mixer.Sound.play(collision)
+                self.snek.direction = 'death'
+                self.speed = 0.3
+                pygame.display.flip()
+        
+        # Warping
+        if self.snek.x[0] < 0:
+            self.snek.x[0] = constants.wscreen - 32
+        if self.snek.x[0] >= constants.wscreen:
+            self.snek.x[0] = 0
+
+        if self.snek.y[0] < 0:
+            self.snek.y[0] = constants.hscreen - 32
+        if self.snek.y[0] >= constants.hscreen:
+            self.snek.y[0] = 0
+
+    # Texts 
+    def show_death(self):
+        font = pygame.font.Font('Pixels.ttf', 60)
+        death = font.render(f'You lost! - Score: {self.snek.length - 5}', True, (0, 0, 0))
+        self.window.blit(death, (120, 120))
+        death2 = font.render(f'Press [ENTER] to restart, Press [ESC] to exit', True, (0, 0, 0))
+        self.window.blit(death2, (50, 240))
+        
     def show_score(self):
         font = pygame.font.Font('Pixels.ttf', 60)
         score = font.render(f'Score: {self.snek.length - 5}', True, (0, 0, 0))
         self.window.blit(score, (5, -15))
 
+    # Running & Events
     def run(self):
         running = True
         while running:
@@ -167,6 +217,13 @@ class Game():
                         self.snek.move_right()
                         pygame.mixer.Sound.play(rotato)
 
+                    if event.key == K_RETURN and self.snek.direction == 'death':
+                        self.snek.direction = 'none'
+                        self.snek.length = 5
+                        self.snek.x = [constants.snek_size]*5
+                        self.snek.y = [constants.snek_size]*5
+                        self.aple.move()
+
 
                     if event.key == K_s:
                         nocontext = 1
@@ -183,5 +240,6 @@ class Game():
             self.play()
             time.sleep(self.speed)
 
+# Game Loop
 game = Game()
 game.run()

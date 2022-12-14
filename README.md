@@ -11,8 +11,8 @@ can't stop the movement of the snake while the game is running.
 Below are some images about the current state of the game, which **is still under
 construction** :point_down:
 
-<image src=" " alt="preview-1">
-
-<image src=" " alt="preview-3">
+<image src="preview-1.png" alt="preview-1">
 
 <image src=" " alt="preview-2">
+
+<image src=" " alt="preview-3">

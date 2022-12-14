@@ -2,7 +2,7 @@
 
 Building a version of the snake game in Python and Pygame.
 
-:snake: :apple: *snek and snak* is a simple game where if snek eats a
+:snake: :apple: *snek and snak* is a simple game where if snek (who haves a gun for some reason) eats a
 snak it gets longer and your score increases. If your snek hits any part of
 its body it will die. The user controls the direction of the snek's head (up, down,
 left or right) with the arrow keys and the snek´s body follows. Also, the player
